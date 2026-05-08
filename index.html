@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Void Coffee — Bangsar, KL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #F2EFE9;
+      --surface:  #ECEAE3;
+      --text:     #1A1A18;
+      --muted:    #8A8878;
+      --border:   #D8D5CC;
+      --white:    #FFFFFF;
+      --accent:   #1A1A18;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 3rem;
+      background: rgba(242,239,233,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex; gap: 2.4rem; list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: 'VOID';
+      position: absolute;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(10rem, 25vw, 22rem);
+      font-weight: 300;
+      color: var(--surface);
+      letter-spacing: -0.04em;
+      user-select: none;
+      pointer-events: none;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+    }
+    .hero-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.35s forwards;
+    }
+    .hero-sub {
+      font-size: 0.82rem;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.5s forwards;
+    }
+    .hero-cta {
+      margin-top: 2.8rem;
+      display: flex; gap: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.65s forwards;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--text);
+      color: var(--text);
+      transition: all 0.25s;
+      cursor: pointer;
+      background: transparent;
+    }
+    .btn:hover, .btn.filled {
+      background: var(--text);
+      color: var(--bg);
+    }
+    .btn.filled:hover {
+      background: transparent;
+      color: var(--text);
+    }
+    .hero-scroll {
+      position: absolute; bottom: 2.5rem;
+      font-size: 0.65rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--muted);
+      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+      opacity: 0; animation: fadeUp 0.8s 0.9s forwards;
+    }
+    .hero-scroll::after {
+      content: '';
+      width: 1px; height: 2.5rem;
+      background: var(--border);
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 7rem 3rem; }
+    .section-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 3.5rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── ABOUT STRIP ── */
+    .about-strip {
+      background: var(--text);
+      color: var(--bg);
+      padding: 5rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr 1px 1fr;
+      gap: 0;
+      text-align: center;
+    }
+    .about-divider { background: rgba(255,255,255,0.12); }
+    .about-item { padding: 1.5rem 3rem; }
+    .about-item-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 300;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .about-item-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(242,239,233,0.5);
+    }
+
+    /* ── MENU ── */
+    #menu { max-width: 900px; margin: 0 auto; }
+    .menu-categories {
+      display: flex; gap: 0.5rem; margin-bottom: 3rem; flex-wrap: wrap;
+    }
+    .menu-tab {
+      padding: 0.4rem 1.1rem;
+      font-size: 0.65rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      border: 1px solid var(--border);
+      background: transparent; color: var(--muted);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .menu-tab.active, .menu-tab:hover {
+      background: var(--text); color: var(--bg); border-color: var(--text);
+    }
+    .menu-grid {
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .menu-grid.active { display: grid; }
+    .menu-item {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid var(--border);
+      gap: 1rem;
+    }
+    .menu-item:last-child { border-bottom: none; }
+    .menu-item-left { flex: 1; }
+    .menu-item-name {
+      font-size: 0.9rem; font-weight: 400;
+      margin-bottom: 0.2rem;
+    }
+    .menu-item-desc {
+      font-size: 0.72rem; color: var(--muted); font-weight: 300;
+    }
+    .menu-item-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-weight: 400;
+      white-space: nowrap; color: var(--text);
+    }
+    .menu-note {
+      margin-top: 2rem;
+      padding: 1rem 1.2rem;
+      background: var(--surface);
+      border-left: 2px solid var(--border);
+      font-size: 0.72rem; color: var(--muted); font-weight: 300;
+    }
+
+    /* ── INFO GRID ── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--border);
+      max-width: 900px; margin: 0 auto;
+    }
+    .info-cell {
+      padding: 2.5rem;
+      border-right: 1px solid var(--border);
+    }
+    .info-cell:last-child { border-right: none; }
+    .info-cell-title {
+      font-size: 0.62rem; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 1.2rem;
+    }
+    .info-cell-content {
+      font-size: 0.85rem; font-weight: 300; line-height: 1.9;
+    }
+    .info-cell-content strong { font-weight: 500; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; letter-spacing: 0.25em; text-transform: uppercase;
+    }
+    .footer-copy {
+      font-size: 0.65rem; color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── CHAT WIDGET ── */
+    #chat-btn {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
+      width: 3.4rem; height: 3.4rem;
+      background: var(--text); color: var(--bg);
+      border: none; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    #chat-btn:hover {
+      transform: scale(1.06);
+      box-shadow: 0 6px 32px rgba(0,0,0,0.24);
+    }
+    #chat-btn svg { transition: transform 0.25s; }
+
+    #chat-panel {
+      position: fixed; bottom: 6.2rem; right: 2rem; z-index: 199;
+      width: 360px; height: 520px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.12);
+      transform: translateY(16px) scale(0.97);
+      opacity: 0; pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #chat-panel.open {
+      transform: translateY(0) scale(1);
+      opacity: 1; pointer-events: all;
+    }
+    .chat-header {
+      padding: 1.1rem 1.3rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--text); color: var(--bg);
+    }
+    .chat-header-left { display: flex; align-items: center; gap: 0.7rem; }
+    .chat-status-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #6fcf97;
+      box-shadow: 0 0 0 3px rgba(111,207,151,0.25);
+    }
+    .chat-header-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; font-weight: 400; letter-spacing: 0.08em;
+    }
+    .chat-header-sub {
+      font-size: 0.62rem; font-weight: 300;
+      color: rgba(242,239,233,0.6); letter-spacing: 0.06em;
+    }
+    .chat-close {
+      background: none; border: none; color: rgba(242,239,233,0.6);
+      cursor: pointer; font-size: 1.2rem; line-height: 1;
+      transition: color 0.2s;
+    }
+    .chat-close:hover { color: var(--bg); }
+
+    .chat-messages {
+      flex: 1; overflow-y: auto; padding: 1.2rem;
+      display: flex; flex-direction: column; gap: 0.9rem;
+      scroll-behavior: smooth;
+    }
+    .chat-messages::-webkit-scrollbar { width: 3px; }
+    .chat-messages::-webkit-scrollbar-track { background: transparent; }
+    .chat-messages::-webkit-scrollbar-thumb { background: var(--border); }
+
+    .msg {
+      max-width: 82%; display: flex; flex-direction: column;
+      animation: msgIn 0.2s ease-out;
+    }
+    .msg.user { align-self: flex-end; align-items: flex-end; }
+    .msg.bot  { align-self: flex-start; align-items: flex-start; }
+    .msg-bubble {
+      padding: 0.65rem 0.9rem;
+      font-size: 0.8rem; line-height: 1.55; font-weight: 300;
+    }
+    .msg.user .msg-bubble {
+      background: var(--text); color: var(--bg);
+    }
+    .msg.bot .msg-bubble {
+      background: var(--surface); color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .msg-time {
+      font-size: 0.58rem; color: var(--muted);
+      margin-top: 0.25rem; letter-spacing: 0.05em;
+    }
+
+    .chat-typing {
+      align-self: flex-start;
+      display: none; align-items: center; gap: 4px;
+      padding: 0.75rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .chat-typing.show { display: flex; }
+    .chat-typing span {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--muted);
+      animation: typing 1.2s infinite;
+    }
+    .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+    .chat-input-area {
+      padding: 0.9rem 1rem;
+      border-top: 1px solid var(--border);
+      display: flex; gap: 0.6rem; align-items: flex-end;
+    }
+    .chat-input {
+      flex: 1;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      padding: 0.6rem 0.8rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem; font-weight: 300;
+      color: var(--text);
+      resize: none; outline: none;
+      max-height: 80px; min-height: 36px;
+      line-height: 1.4;
+      transition: border-color 0.2s;
+    }
+    .chat-input:focus { border-color: var(--text); }
+    .chat-input::placeholder { color: var(--muted); }
+    .chat-send {
+      width: 36px; height: 36px; flex-shrink: 0;
+      background: var(--text); color: var(--bg);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.2s;
+    }
+    .chat-send:hover { opacity: 0.8; }
+    .chat-send:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .chat-footer-note {
+      text-align: center;
+      font-size: 0.58rem; color: var(--muted);
+      padding: 0.5rem 1rem 0.7rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── QUICK REPLIES ── */
+    .quick-replies {
+      display: flex; flex-wrap: wrap; gap: 0.4rem;
+      padding: 0.6rem 1rem 0;
+    }
+    .qr-btn {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.65rem; font-weight: 400;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border);
+      background: transparent; color: var(--text);
+      cursor: pointer; letter-spacing: 0.04em;
+      transition: all 0.15s;
+    }
+    .qr-btn:hover {
+      background: var(--text); color: var(--bg); border-color: var(--text);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes typing {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30%           { transform: translateY(-4px); opacity: 1; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 5rem 1.5rem; }
+      .about-strip { grid-template-columns: 1fr; }
+      .about-divider { display: none; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .info-grid { grid-template-columns: 1fr; }
+      .info-cell { border-right: none; border-bottom: 1px solid var(--border); }
+      #chat-panel { width: calc(100vw - 2rem); right: 1rem; bottom: 5.5rem; }
+      footer { flex-direction: column; gap: 0.8rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Void Coffee</div>
+    <ul class="nav-links">
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#visit">Visit</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow">Specialty Coffee · Bangsar, Kuala Lumpur</p>
+    <h1 class="hero-title">Void</h1>
+    <p class="hero-sub">A space to slow down. A cup worth staying for.</p>
+    <div class="hero-cta">
+      <a href="#menu" class="btn filled">View Menu</a>
+      <a href="#visit" class="btn">Find Us</a>
+    </div>
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <div class="about-strip">
+    <div class="about-item">
+      <div class="about-item-num">08</div>
+      <div class="about-item-label">Years of craft</div>
+    </div>
+    <div class="about-divider"></div>
+    <div class="about-item">
+      <div class="about-item-num">12+</div>
+      <div class="about-item-label">Menu items</div>
+    </div>
+    <div class="about-divider"></div>
+    <div class="about-item">
+      <div class="about-item-num">1</div>
+      <div class="about-item-label">Location · Bangsar</div>
+    </div>
+  </div>
+
+  <!-- MENU -->
+  <section id="menu" style="padding-top: 6rem;">
+    <div style="max-width:900px; margin:0 auto;">
+      <div class="section-label">Our Menu</div>
+      <div class="menu-categories">
+        <button class="menu-tab active" onclick="switchTab('espresso', this)">Espresso</button>
+        <button class="menu-tab" onclick="switchTab('signature', this)">Signature</button>
+        <button class="menu-tab" onclick="switchTab('noncoffee', this)">Non-Coffee</button>
+        <button class="menu-tab" onclick="switchTab('food', this)">Food</button>
+      </div>
+
+      <!-- Espresso -->
+      <div class="menu-grid active" id="tab-espresso">
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">Espresso</div><div class="menu-item-desc">Single origin, direct trade</div></div>
+          <div class="menu-item-price">RM 8</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">Americano</div><div class="menu-item-desc">Espresso + hot water</div></div>
+          <div class="menu-item-price">RM 10</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">Cortado</div><div class="menu-item-desc">Equal parts espresso & milk</div></div>
+          <div class="menu-item-price">RM 12</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">Flat White</div><div class="menu-item-desc">Ristretto, velvety microfoam</div></div>
+          <div class="menu-item-price">RM 13</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">Cappuccino</div><div class="menu-item-desc">Classic Italian ratio</div></div>
+          <div class="menu-item-price">RM 13</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">Latte</div><div class="menu-item-desc">Espresso + steamed whole milk</div></div>
+          <div class="menu-item-price">RM 14</div>
+        </div>
+      </div>
+
+      <!-- Signature -->
+      <div class="menu-grid" id="tab-signature">
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">Void Black</div><div class="menu-item-desc">Cold brew + charcoal oat milk</div></div>
+          <div class="menu-item-price">RM 17</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">White Noise</div><div class="menu-item-desc">Vanilla oat latte, served iced</div></div>
+          <div class="menu-item-price">RM 16</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">Static</div><div class="menu-item-desc">Hojicha + espresso, iced</div></div>
+          <div class="menu-item-price">RM 15</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">Frequency</div><div class="menu-item-desc">Ceremonial matcha latte</div></div>
+          <div class="menu-item-price">RM 15</div>
+        </div>
+      </div>
+
+      <!-- Non-Coffee -->
+      <div class="menu-grid" id="tab-noncoffee">
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">Matcha Latte</div><div class="menu-item-desc">Ceremonial grade, oat or whole milk</div></div>
+          <div class="menu-item-price">RM 14</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">Hojicha Latte</div><div class="menu-item-desc">Roasted green tea, mild & smooth</div></div>
+          <div class="menu-item-price">RM 13</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">Chamomile</div><div class="menu-item-desc">Loose leaf, honey on the side</div></div>
+          <div class="menu-item-price">RM 10</div>
+        </div>
+      </div>
+
+      <!-- Food -->
+      <div class="menu-grid" id="tab-food">
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">Sourdough Toast</div><div class="menu-item-desc">Cultured butter, sea salt flakes</div></div>
+          <div class="menu-item-price">RM 12</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">Avocado Toast</div><div class="menu-item-desc">Chilli flakes, poached egg, lemon</div></div>
+          <div class="menu-item-price">RM 18</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">Banana Bread</div><div class="menu-item-desc">House-baked, served warm</div></div>
+          <div class="menu-item-price">RM 11</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left"><div class="menu-item-name">Affogato</div><div class="menu-item-desc">Double espresso over vanilla ice cream</div></div>
+          <div class="menu-item-price">RM 16</div>
+        </div>
+      </div>
+
+      <div class="menu-note">
+        Oat milk or almond milk available at +RM2. All prices inclusive of GST.
+        Please inform us of any allergies before ordering.
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT -->
+  <section id="visit">
+    <div class="section-label">Find Us</div>
+    <div class="info-grid">
+      <div class="info-cell">
+        <div class="info-cell-title">Location</div>
+        <div class="info-cell-content">
+          12, Jalan Telawi 3<br>
+          Bangsar<br>
+          59100 Kuala Lumpur<br><br>
+          <strong>Parking:</strong> Street parking on Jalan Telawi.
+          Wilson parking at Bangsar Shopping Centre (3 min walk).
+        </div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-title">Hours</div>
+        <div class="info-cell-content">
+          <strong>Mon – Fri</strong><br>8:00 AM – 6:00 PM<br><br>
+          <strong>Sat – Sun</strong><br>9:00 AM – 7:00 PM<br><br>
+          Closed on public holidays.
+        </div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-title">Good to Know</div>
+        <div class="info-cell-content">
+          Dine-in & takeaway<br>
+          No reservations needed<br>
+          Free WiFi<br>
+          Pet-friendly (outdoor)<br>
+          Cards & e-wallets accepted<br>
+          (TnG, Boost, GrabPay)
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Void Coffee</div>
+    <div class="footer-copy">© 2026 Void Coffee · Bangsar, KL · hello@voidcoffee.my</div>
+  </footer>
+
+  <!-- CHAT BUTTON -->
+  <button id="chat-btn" onclick="toggleChat()" title="Chat with us">
+    <svg id="chat-icon-open" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+    </svg>
+    <svg id="chat-icon-close" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+    </svg>
+  </button>
+
+  <!-- CHAT PANEL -->
+  <div id="chat-panel">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-status-dot"></div>
+        <div>
+          <div class="chat-header-title">Void Coffee</div>
+          <div class="chat-header-sub">AI Assistant · Usually replies instantly</div>
+        </div>
+      </div>
+      <button class="chat-close" onclick="toggleChat()">✕</button>
+    </div>
+
+    <div class="chat-messages" id="chat-messages">
+      <!-- Welcome message injected by JS -->
+    </div>
+
+    <div class="quick-replies" id="quick-replies">
+      <button class="qr-btn" onclick="sendQuick('What\'s on the menu?')">Menu</button>
+      <button class="qr-btn" onclick="sendQuick('Where are you located?')">Location</button>
+      <button class="qr-btn" onclick="sendQuick('What are your opening hours?')">Hours</button>
+      <button class="qr-btn" onclick="sendQuick('Do you have oat milk?')">Oat milk?</button>
+    </div>
+
+    <div class="chat-input-area">
+      <textarea
+        class="chat-input"
+        id="chat-input"
+        placeholder="Ask us anything..."
+        rows="1"
+        onkeydown="handleKey(event)"
+        oninput="autoResize(this)"
+      ></textarea>
+      <button class="chat-send" id="send-btn" onclick="sendMessage()">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+    <div class="chat-footer-note">Powered by AI · For urgent queries, WhatsApp us</div>
+  </div>
+
+  <script>
+    // ── MENU TABS ──
+    function switchTab(id, btn) {
+      document.querySelectorAll('.menu-grid').forEach(g => g.classList.remove('active'));
+      document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // ── CHAT STATE ──
+    let chatOpen = false;
+    let isLoading = false;
+    let conversationHistory = [];
+
+    const SYSTEM_PROMPT = `You are the friendly AI assistant for Void Coffee, a modern specialty coffee cafe located in Bangsar, Kuala Lumpur. Help customers with questions about the menu, pricing, location, hours, and general enquiries.
+
+Be warm, concise, and on-brand — Void Coffee is minimal and refined. No fluff, no excessive emojis. One or two at most if it fits naturally.
+
+Always respond in the same language the customer uses. Support English and Bahasa Malaysia fluently.
+
+━━━ MENU ━━━
+
+ESPRESSO
+• Espresso — RM8 (single origin, direct trade)
+• Americano — RM10 (espresso + hot water)
+• Cortado — RM12 (equal parts espresso & milk)
+• Flat White — RM13 (ristretto, velvety microfoam)
+• Cappuccino — RM13 (classic Italian ratio)
+• Latte — RM14 (espresso + steamed whole milk)
+
+SIGNATURE
+• Void Black — RM17 (cold brew + charcoal oat milk)
+• White Noise — RM16 (vanilla oat latte, iced)
+• Static — RM15 (hojicha + espresso, iced)
+• Frequency — RM15 (ceremonial matcha latte)
+
+NON-COFFEE
+• Matcha Latte — RM14 (ceremonial grade)
+• Hojicha Latte — RM13 (roasted green tea)
+• Chamomile Tea — RM10 (loose leaf, honey on side)
+
+FOOD
+• Sourdough Toast — RM12 (cultured butter, sea salt)
+• Avocado Toast — RM18 (chilli flakes, poached egg, lemon)
+• Banana Bread — RM11 (house-baked, served warm)
+• Affogato — RM16 (double espresso over vanilla ice cream)
+
+Milk alternatives: Oat milk +RM2, Almond milk +RM2.
+
+━━━ LOCATION & HOURS ━━━
+
+Address: 12, Jalan Telawi 3, Bangsar, 59100 Kuala Lumpur
+Parking: Street parking on Jalan Telawi. Wilson parking at Bangsar Shopping Centre (3 min walk).
+
+Hours:
+• Monday–Friday: 8:00 AM – 6:00 PM
+• Saturday–Sunday: 9:00 AM – 7:00 PM
+• Public Holidays: Closed
+
+━━━ GENERAL INFO ━━━
+
+• Dine-in and takeaway only (no delivery)
+• No reservations needed for regular visits
+• Free WiFi available
+• Pet-friendly at outdoor seating area
+• Payments: Cash, credit/debit cards, TnG, Boost, GrabPay
+• Please ask about allergens before ordering
+
+━━━ ESCALATION ━━━
+
+If a customer asks something you cannot confidently answer, say:
+"For that, it's best to reach our team directly — WhatsApp us at +60 12-345 6789 or email hello@voidcoffee.my and we'll get back to you shortly."
+
+Never make up information not listed above. Never guess prices or hours.`;
+
+    // ── CHAT TOGGLE ──
+    function toggleChat() {
+      chatOpen = !chatOpen;
+      document.getElementById('chat-panel').classList.toggle('open', chatOpen);
+      document.getElementById('chat-icon-open').style.display = chatOpen ? 'none' : 'block';
+      document.getElementById('chat-icon-close').style.display = chatOpen ? 'block' : 'none';
+      if (chatOpen && conversationHistory.length === 0) {
+        renderWelcome();
+      }
+      if (chatOpen) {
+        setTimeout(() => document.getElementById('chat-input').focus(), 300);
+      }
+    }
+
+    function renderWelcome() {
+      const msgs = document.getElementById('chat-messages');
+      const time = getTime();
+      msgs.innerHTML = `
+        <div class="msg bot">
+          <div class="msg-bubble">Hi there ☕ Welcome to Void Coffee. Ask me anything about our menu, hours, or location — I'm here to help.</div>
+          <div class="msg-time">${time}</div>
+        </div>`;
+    }
+
+    // ── SEND MESSAGE ──
+    async function sendMessage(text) {
+      const input = document.getElementById('chat-input');
+      const userText = text || input.value.trim();
+      if (!userText || isLoading) return;
+
+      // Hide quick replies after first message
+      document.getElementById('quick-replies').style.display = 'none';
+
+      appendMessage('user', userText);
+      input.value = '';
+      input.style.height = 'auto';
+      conversationHistory.push({ role: 'user', content: userText });
+
+      isLoading = true;
+      document.getElementById('send-btn').disabled = true;
+      showTyping(true);
+
+      try {
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 1000,
+            system: SYSTEM_PROMPT,
+            messages: conversationHistory
+          })
+        });
+
+        const data = await response.json();
+        const reply = data.content?.[0]?.text || "Sorry, I couldn't get a response. Please try again.";
+        conversationHistory.push({ role: 'assistant', content: reply });
+        showTyping(false);
+        appendMessage('bot', reply);
+      } catch (err) {
+        showTyping(false);
+        appendMessage('bot', 'Something went wrong. Please try again or WhatsApp us at +60 12-345 6789.');
+      }
+
+      isLoading = false;
+      document.getElementById('send-btn').disabled = false;
+      document.getElementById('chat-input').focus();
+    }
+
+    function sendQuick(text) {
+      sendMessage(text);
+    }
+
+    function appendMessage(role, text) {
+      const msgs = document.getElementById('chat-messages');
+      const div = document.createElement('div');
+      div.className = `msg ${role}`;
+      div.innerHTML = `
+        <div class="msg-bubble">${escapeHtml(text).replace(/\n/g, '<br>')}</div>
+        <div class="msg-time">${getTime()}</div>`;
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function showTyping(show) {
+      let typing = document.getElementById('chat-typing');
+      if (!typing) {
+        typing = document.createElement('div');
+        typing.id = 'chat-typing';
+        typing.className = 'chat-typing msg';
+        typing.innerHTML = '<span></span><span></span><span></span>';
+        document.getElementById('chat-messages').appendChild(typing);
+      }
+      typing.classList.toggle('show', show);
+      if (show) {
+        const msgs = document.getElementById('chat-messages');
+        msgs.scrollTop = msgs.scrollHeight;
+      }
+    }
+
+    function handleKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    }
+
+    function autoResize(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 80) + 'px';
+    }
+
+    function getTime() {
+      return new Date().toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>
